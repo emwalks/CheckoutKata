@@ -13,13 +13,14 @@ class CheckoutKataTests: XCTestCase {
 
 
     func testGivenAnEmptyBasket_CalculatedTotalIsZero() {
- 
-        let actualTotal = checkout.total
+        let basket = Basket()
+        let actualTotal = basket.total
         let expectedTotal = 0
         
         XCTAssertEqual(expectedTotal, actualTotal)
     }
+}
 
-
-
+class Basket {
+    var total = 0
 }
