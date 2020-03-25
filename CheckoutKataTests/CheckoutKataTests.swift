@@ -21,6 +21,4 @@ class CheckoutKataTests: XCTestCase {
     }
 }
 
-class Basket {
-    var total = 0
-}
+
