@@ -10,15 +10,27 @@ import XCTest
 @testable import CheckoutKata
 
 class CheckoutKataTests: XCTestCase {
-
-
-    func testGivenAnEmptyBasket_CalculatedTotalIsZero() {
-        let basket = Basket()
-        let actualTotal = basket.total
-        let expectedTotal = 0
+    
+    func testGivenAnItem_WhenCheckedOut_ThenItemPriceIsAddedToTotal(){
+        
+        class Checkout {
+            var total = 0
+            
+            func checkoutItem(itemSku: String) {
+                total += 50
+            }
+        }
+        
+        let checkout = Checkout()
+        
+        checkout.checkoutItem(itemSku: "A")
+        let actualTotal = checkout.total
+        let expectedTotal = 50
         
         XCTAssertEqual(expectedTotal, actualTotal)
     }
+
+
 }
 
 
