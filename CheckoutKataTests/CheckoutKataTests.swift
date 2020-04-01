@@ -16,8 +16,12 @@ class CheckoutKataTests: XCTestCase {
         class Checkout {
             var total = 0
             
+            var inventory = ["A":50]
+            
             func checkoutItem(itemSku: String) {
-                total += 50
+                if let price = inventory[itemSku] {
+                    total += price
+                }
             }
         }
         
