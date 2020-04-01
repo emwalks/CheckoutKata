@@ -11,19 +11,21 @@ import XCTest
 
 class CheckoutKataTests: XCTestCase {
     
+    class Checkout {
+          var total = 0
+          
+          var inventory = ["A":50]
+          
+          func checkoutItem(itemSku: String) {
+              if let price = inventory[itemSku] {
+                  total += price
+              }
+          }
+      }
+    
     func testGivenAnItem_WhenCheckedOut_ThenItemPriceIsAddedToTotal(){
         
-        class Checkout {
-            var total = 0
-            
-            var inventory = ["A":50]
-            
-            func checkoutItem(itemSku: String) {
-                if let price = inventory[itemSku] {
-                    total += price
-                }
-            }
-        }
+  
         
         let checkout = Checkout()
         
@@ -33,8 +35,22 @@ class CheckoutKataTests: XCTestCase {
         
         XCTAssertEqual(expectedTotal, actualTotal)
     }
+    
+    func testGivenAnItemNotRecognised_WhenCheckedOut_ThenItemPriceIsNotAddedToTotal(){
+        
+        let checkout = Checkout()
+        
+        checkout.checkoutItem(itemSku: "")
 
-
+        let actualTotal = checkout.total
+        let expectedTotal = 0
+        
+        //this  should probably error!!
+        //need to add an else?
+        XCTAssertEqual(expectedTotal, actualTotal)
+    }
+    
+    
 }
 
 
