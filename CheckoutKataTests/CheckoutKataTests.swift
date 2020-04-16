@@ -11,43 +11,86 @@ import XCTest
 
 class CheckoutKataTests: XCTestCase {
     
-    class Checkout {
-          var total = 0
-          
-          var inventory = ["A":50]
-          
-          func checkoutItem(itemSku: String) {
-              if let price = inventory[itemSku] {
-                  total += price
-              }
-          }
-      }
+    var inventory: [String : Int]!
     
-    func testGivenAnItem_WhenCheckedOut_ThenItemPriceIsAddedToTotal(){
+    var checkout: Checkout!
+    
+    override func setUp() {
+        super.setUp()
         
-  
+        inventory =  ["A": 50, "B": 30, "C": 20, "D": 15]
+        checkout = Checkout(inventory: inventory)
         
-        let checkout = Checkout()
         
-        checkout.checkoutItem(itemSku: "A")
-        let actualTotal = checkout.total
-        let expectedTotal = 50
-        
-        XCTAssertEqual(expectedTotal, actualTotal)
     }
     
-    func testGivenAnItemNotRecognised_WhenCheckedOut_ThenItemPriceIsNotAddedToTotal(){
+    func testGivenItemA_WhenCheckedOut_ThenTotalPriceIsCorrect(){
         
-        let checkout = Checkout()
+        checkout.scanItem(item: "A")
         
-        checkout.checkoutItem(itemSku: "")
-
-        let actualTotal = checkout.total
-        let expectedTotal = 0
+        XCTAssertEqual(50, checkout.total)
+    }
+    
+    func testGivenItemB_WhenCheckedOut_ThenTotalPriceIsCorrect() {
+        checkout.scanItem(item: "B")
         
-        //this  should probably error!!
-        //need to add an else?
-        XCTAssertEqual(expectedTotal, actualTotal)
+        XCTAssertEqual(30, checkout.total)
+    }
+    
+    func testGivenItemC_WhenCheckedOut_ThenTotalPriceIsCorrect(){
+        checkout.scanItem(item: "C")
+        
+        XCTAssertEqual(20, checkout.total)
+    }
+    
+    func testGivenItemD_WhenCheckedOut_ThenTotalPriceIsCorrect(){
+        checkout.scanItem(item: "D")
+        
+        XCTAssertEqual(15, checkout.total)
+    }
+    
+    func testWhenGivenARandomItem_WhenCheckedOut_ThenTotalPriceIsCorrect() {
+        
+        let randomItem = inventory.randomElement()
+        checkout.scanItem(item: randomItem!.key)
+        
+        XCTAssertEqual(randomItem?.value, checkout.total)
+        
+    }
+    
+    func testGivenItemAandB_WhenCheckedOut_ThenTotalPriceIsCorrect(){
+        checkout.scanItem(item: "A")
+        checkout.scanItem(item: "B")
+        
+        XCTAssertEqual(80, checkout.total)
+    }
+    
+    func testWhenGivenRandomItems_WhenCheckedOut_ThenTotalPriceIsCorrect() {
+        let randomItem1 = inventory.randomElement()
+        checkout.scanItem(item: randomItem1!.key)
+        
+        let randomItem2 = inventory.randomElement()
+        checkout.scanItem(item: randomItem2!.key)
+        
+        let expectedResult = (randomItem1!.value) + (randomItem2!.value)
+        
+        XCTAssertEqual(expectedResult, checkout.total)
+    }
+    
+    
+    class Checkout {
+        var total = 0
+        var inventory: [String: Int]
+        
+        init(inventory: [String: Int]) {
+            self.inventory = inventory
+        }
+        
+        
+        func scanItem(item: String) {
+            guard let price = inventory[item] else { return }
+            total += price
+        }
     }
     
     
